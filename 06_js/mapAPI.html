@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>MapAPI</title>
+  <style>
+    body {margin: 0;padding: 0;width: 100%;height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <!-- MapArea -->
+<h1>Change display from event<button id='move'>Change Button</button></h1>
+<h2>Select Maps Type
+  <select id="type">
+    <option value="road" selected>road</option>
+        <option value="aerial">aerial</option>
+        <option value="canvasDark">canvasDark</option>
+        <option value="canvasLight">canvasLight</option>
+        <option value="birdseye">birdseye</option>
+        <option value="grayscale">grayscale</option>
+        <option value="streetside">streetside</option>
+    </select>
+</h2>
+  <!-- <p id="infomation"></p> -->
+  <div id="view"></div>
+  <div id="myMap" style='position:relative;width:600px;height:400px;'></div> 
+  <!-- /MapArea -->
+  <div id="mapClick" class="mouse">Click</div>
+  <!-- jQuery&GoogleMapsAPI -->
+  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <script src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=AqjbKmgjtR88SFgZd0YP-UYaY3dFY3fBKDs8S0XMTY7V8K8uMN4EsY4bQMwI4W0w'
+    async defer></script>
+  <script src="js/BmapQuery.js"></script>
+  <!-- jQuery&GoogleMapsAPI -->
+
+
+
+
+  <script>
+// ***********************************************************************************
+  // Bing Maps の初期設定・読み込み
+  let map, typeid, type;
+  function GetMap(){
+      map = new Microsoft.Maps.Map('#myMap', {
+      center: new Microsoft.Maps.Location(34.61280059814453, 135.73394775390625),
+      mapTypeId: Microsoft.Maps.MapTypeId.load,
+      zoom: 16
+    });
+
+    // //START　ピンをたてるやつ
+    // let center = map.getCenter()
+    // //Create custom Pushpin
+    // let pin = new Microsoft.Maps.Pushpin(center, {
+    //     color: 'red',            //Color
+    //     draggable:true,          //MouseDraggable
+    //     enableClickedStyle:true, //Click
+    //     enableHoverStyle:true,   //MouseOver
+    //     visible:true             //show/hide
+    // });
+    // //Add the pushpin to the map
+    // map.entities.push(pin);
+    // //END　ピンをたてるやつ
+
+    // START　infoBox
+    let center = map.getCenter();
+    let infobox = new Microsoft.Maps.Infobox(center, {
+      title: 'title',
+      description: 'description',
+      actions: [{
+            label: 'Handler1',
+            eventHandler: function () { //function
+                alert('Handler1');
+            }
+        }, {
+            label: 'Handler2',
+            eventHandler: function () { //function
+                alert('Handler2');
+            }
+        }]
+    });
+    infobox.setMap(map); //Add infobox to Map
+    // END　infoBox
+
+
+
+    // // START　クリックイベント
+    // Microsoft.Maps.Events.addHandler(pin, 'click', function () { highlight('mapClick'); });
+    // //Event:ColorChange
+    // function highlight(id) {
+    //     //Highlight the div to indicate that the event has fired.
+    //     document.getElementById(id).style.background = 'LightGreen';
+    //     //Remove the highlighting after a second.
+    //     setTimeout(function () { document.getElementById(id).style.background = 'white'; }, 1000);
+    // }
+    // // END　クリックイベント
+  }
+// ***********************************************************************************
+
+
+
+
+
+
+
+//***********************************************************************************
+  //Select MapTypeID
+  document.getElementById("type").onchange = function(){
+      typeid = this.value; //selectboxの値を取得
+      if(typeid == "load") type = {mapTypeId: Microsoft.Maps.MapTypeId.load};
+      if(typeid == "aerial") type = {mapTypeId: Microsoft.Maps.MapTypeId.aerial};
+      if(typeid == "canvasDark") type = {mapTypeId: Microsoft.Maps.MapTypeId.canvasDark};
+      if(typeid == "canvasLight") type = {mapTypeId: Microsoft.Maps.MapTypeId.canvasLight};
+      if(typeid == "birdseye") type = {mapTypeId: Microsoft.Maps.MapTypeId.birdseye};
+      if(typeid == "grayscale") type = {mapTypeId: Microsoft.Maps.MapTypeId.grayscale};
+      if(typeid == "streetside") type = {mapTypeId: Microsoft.Maps.MapTypeId.streetside};
+      //add type
+      map.setView(type);
+  }
+//***********************************************************************************
+
+  
+// ***********************************************************************************
+  //map.setView: Display change of map
+  document.getElementById("move").onclick = function (){
+        map.setView({
+            mapTypeId: Microsoft.Maps.MapTypeId.aerial,
+            center: new Microsoft.Maps.Location(35.027222, -111.0225),
+            zoom: 15
+        });
+    }
+// ***********************************************************************************
+    
+
+
+
+
+  </script>
+</body>
